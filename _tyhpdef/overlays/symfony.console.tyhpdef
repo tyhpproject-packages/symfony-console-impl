@@ -6,10 +6,6 @@
  */
 
 namespace Symfony\Component\Console\Attribute {
-    /**
-     * Suggestion list or a completion callback (`array<...>|callable(...): R`).
-     */
-    type ArgumentSuggestedValues = array<string|\Symfony\Component\Console\Completion\Suggestion>|(callable(\Symfony\Component\Console\Completion\CompletionInput): array<string|\Symfony\Component\Console\Completion\Suggestion>);
 
     /**
      * Harvest miss: `@internal` interface omitted from Layer 1. Ask/Interact attributes implement it.
@@ -24,10 +20,10 @@ namespace Symfony\Component\Console\Attribute {
     // @overlay-against: class Argument
     partial class Argument {
         /**
-         * @param \Symfony\Component\Console\Attribute\ArgumentSuggestedValues $suggestedValues
+         * @param array<string|\Symfony\Component\Console\Completion\Suggestion>|(callable(\Symfony\Component\Console\Completion\CompletionInput): array<string|\Symfony\Component\Console\Completion\Suggestion>) $suggestedValues
          */
         // @overlay-against: function __construct(string $description, string $name, array|callable $suggestedValues): void
-        public function __construct(string $description = '', string $name = '', \Symfony\Component\Console\Attribute\ArgumentSuggestedValues $suggestedValues = []): void;
+        public function __construct(string $description = '', string $name = '', array<string|\Symfony\Component\Console\Completion\Suggestion>|(callable(\Symfony\Component\Console\Completion\CompletionInput): array<string|\Symfony\Component\Console\Completion\Suggestion>) $suggestedValues = []): void;
     }
 
     /**
@@ -44,26 +40,80 @@ namespace Symfony\Component\Console\Attribute {
     }
 
     /**
+     * Overlay: PHPDoc shapes harvest left loose on `MapInput`.
+     */
+    // @overlay-against: class MapInput
+    partial class MapInput {
+        /**
+         * @param array<string>|null $validationGroups
+         */
+        // @overlay-against: function __construct(array|null $validationGroups): void
+        public function __construct(array<string>|null $validationGroups = null): void;
+    }
+
+    /**
      * Overlay: PHPDoc shapes harvest left loose on `Option`.
      */
     // @overlay-against: class Option
     partial class Option {
         /**
-         * @param \Symfony\Component\Console\Attribute\ArgumentSuggestedValues $suggestedValues
+         * @param array<string|\Symfony\Component\Console\Completion\Suggestion>|(callable(\Symfony\Component\Console\Completion\CompletionInput): array<string|\Symfony\Component\Console\Completion\Suggestion>) $suggestedValues
          */
         // @overlay-against: function __construct(string $description, string $name, array|string|null $shortcut, array|callable $suggestedValues): void
-        public function __construct(string $description = '', string $name = '', array|string|null $shortcut = null, \Symfony\Component\Console\Attribute\ArgumentSuggestedValues $suggestedValues = []): void;
+        public function __construct(string $description = '', string $name = '', array|string|null $shortcut = null, array<string|\Symfony\Component\Console\Completion\Suggestion>|(callable(\Symfony\Component\Console\Completion\CompletionInput): array<string|\Symfony\Component\Console\Completion\Suggestion>) $suggestedValues = []): void;
+    }
+
+    /**
+     * Overlay: PHPDoc shapes harvest left loose on `ValueResolver`.
+     */
+    // @overlay-against: class ValueResolver
+    partial class ValueResolver {
+        /**
+         * @param __ClassName<\Symfony\Component\Console\ArgumentResolver\ValueResolver\ValueResolverInterface>|string $resolver
+         */
+        // @overlay-against: function __construct(string $resolver, bool $disabled): void
+        public function __construct(__ClassName<\Symfony\Component\Console\ArgumentResolver\ValueResolver\ValueResolverInterface>|string $resolver, bool $disabled = false): void;
     }
 
 }
 
 
-namespace Symfony\Component\Console\DependencyInjection {
+namespace Symfony\Component\Console {
     /**
-     * Omit: optional `symfony/dependency-injection` peer (`CompilerPassInterface`).
+     * Omit: extends optional `symfony/dependency-injection` AbstractBundle.
      */
-    // @overlay-against: class AddConsoleCommandPass implements \Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
-    omit class AddConsoleCommandPass {
+    // @overlay-against: class ConsoleBundle extends \Symfony\Component\DependencyInjection\Kernel\AbstractBundle
+    omit class ConsoleBundle {
+    }
+
+    /**
+     * Overlay: PHPDoc shapes harvest left loose on `Application`.
+     */
+    // @overlay-against: class Application implements \Symfony\Contracts\Service\ResetInterface
+    partial class Application {
+        /**
+         * @param array<int, callable>|array<int, \Symfony\Component\Console\Command\Command> $commands
+         */
+        // @overlay-against: function addCommands(array|array $commands): void
+        public function addCommands(array<int, callable>|array<int, \Symfony\Component\Console\Command\Command> $commands): void;
+
+        /**
+         * @return array<\Symfony\Component\Console\Command\Command>
+         */
+        // @overlay-against: function all(?string $namespace): array
+        public function all(?string $namespace = null): array<\Symfony\Component\Console\Command\Command>;
+
+        /**
+         * @return array<\Symfony\Component\Console\Command\Command>
+         */
+        // @overlay-against: function getDefaultCommands(): array
+        protected function getDefaultCommands(): array<\Symfony\Component\Console\Command\Command>;
+
+        /**
+         * @return array<string>
+         */
+        // @overlay-against: function getNamespaces(): array
+        public function getNamespaces(): array<string>;
     }
 }
 
@@ -147,8 +197,8 @@ namespace Symfony\Component\Console\Input {
         /**
          * @param \Closure|(callable(\Symfony\Component\Console\Completion\CompletionInput, \Symfony\Component\Console\Completion\CompletionSuggestions): array<string|\Symfony\Component\Console\Completion\Suggestion>) $suggestedValues
          */
-        // @overlay-against: function __construct(string $name, ?int $mode, string $description, string|bool|int|float|array|null $default, \Closure|array $suggestedValues): void
-        public function __construct(string $name, ?int $mode = null, string $description = '', string|bool|int|float|array|null $default = null, \Closure|(callable(\Symfony\Component\Console\Completion\CompletionInput, \Symfony\Component\Console\Completion\CompletionSuggestions): array<string|\Symfony\Component\Console\Completion\Suggestion>) $suggestedValues = []): void;
+        // @overlay-against: function __construct(string $name, ?int $mode, string $description, mixed $default, \Closure|array $suggestedValues): void
+        public function __construct(string $name, ?int $mode = null, string $description = '', mixed $default = null, \Closure|(callable(\Symfony\Component\Console\Completion\CompletionInput, \Symfony\Component\Console\Completion\CompletionSuggestions): array<string|\Symfony\Component\Console\Completion\Suggestion>) $suggestedValues = []): void;
     }
 
     /**
@@ -191,6 +241,19 @@ namespace Symfony\Component\Console\Input {
          */
         // @overlay-against: function setOptions(array $options): void
         public function setOptions(array<\Symfony\Component\Console\Input\InputOption> $options = []): void;
+    }
+
+    /**
+     * Overlay: PHPDoc shapes harvest left loose on `RawInputInterface`.
+     */
+    // @overlay-against: interface RawInputInterface
+    partial interface RawInputInterface {
+        /**
+         * @param array<string>|null $optionNames
+         * @return array<string>
+         */
+        // @overlay-against: function unparse(array|null $optionNames): array
+        public function unparse(array<string>|null $optionNames = null): array<string>;
     }
 }
 
@@ -235,40 +298,30 @@ namespace Symfony\Component\Console\Tester\Constraint {
     /**
      * Omit: optional PHPUnit peer.
      */
+    // @overlay-against: class CommandFailed extends \PHPUnit\Framework\Constraint\Constraint
+    omit final class CommandFailed {
+    }
+
+    // @overlay-against: class CommandIsInvalid extends \PHPUnit\Framework\Constraint\Constraint
+    omit final class CommandIsInvalid {
+    }
+
     // @overlay-against: class CommandIsSuccessful extends \PHPUnit\Framework\Constraint\Constraint
     omit final class CommandIsSuccessful {
     }
 }
 
-namespace Symfony\Component\Console {
+namespace Symfony\Component\Console\ArgumentResolver\Exception {
     /**
-     * Overlay: PHPDoc shapes harvest left loose on `Application`.
+     * Overlay: PHPDoc shapes harvest left loose on `ResolverNotFoundException`.
      */
-    // @overlay-against: class Application implements \Symfony\Contracts\Service\ResetInterface
-    partial class Application {
+    // @overlay-against: class ResolverNotFoundException extends \RuntimeException
+    partial class ResolverNotFoundException {
         /**
-         * @param array<int, callable>|array<int, \Symfony\Component\Console\Command\Command> $commands
+         * @param array<string> $alternatives
          */
-        // @overlay-against: function addCommands(array|array $commands): void
-        public function addCommands(array<int, callable>|array<int, \Symfony\Component\Console\Command\Command> $commands): void;
-
-        /**
-         * @return array<\Symfony\Component\Console\Command\Command>
-         */
-        // @overlay-against: function all(?string $namespace): array
-        public function all(?string $namespace = null): array<\Symfony\Component\Console\Command\Command>;
-
-        /**
-         * @return array<\Symfony\Component\Console\Command\Command>
-         */
-        // @overlay-against: function getDefaultCommands(): array
-        protected function getDefaultCommands(): array<\Symfony\Component\Console\Command\Command>;
-
-        /**
-         * @return array<string>
-         */
-        // @overlay-against: function getNamespaces(): array
-        public function getNamespaces(): array<string>;
+        // @overlay-against: function __construct(string $name, array $alternatives): void
+        public function __construct(string $name, array<string> $alternatives = []): void;
     }
 }
 
@@ -316,6 +369,26 @@ namespace Symfony\Component\Console\Completion {
     }
 }
 
+namespace Symfony\Component\Console\Question {
+    /**
+     * Overlay: PHPDoc shapes harvest left loose on `Question`.
+     */
+    // @overlay-against: class Question
+    partial class Question {
+        /**
+         * @param array<\Symfony\Component\Validator\Constraint> $constraints
+         */
+        // @overlay-against: function setConstraints(array $constraints): static
+        public function setConstraints(array<\Symfony\Component\Validator\Constraint> $constraints): static;
+
+        /**
+         * @return array<\Symfony\Component\Validator\Constraint>
+         */
+        // @overlay-against: function getConstraints(): array
+        public function getConstraints(): array<\Symfony\Component\Validator\Constraint>;
+    }
+}
+
 namespace Symfony\Component\Console\CommandLoader {
     /**
      * Overlay: PHPDoc shapes harvest left loose on `CommandLoaderInterface`.
@@ -343,6 +416,18 @@ namespace Symfony\Component\Console\CommandLoader {
 }
 
 namespace Symfony\Component\Console\Tester {
+    /**
+     * Overlay: PHPDoc shapes harvest left loose on `CommandTester`.
+     */
+    // @overlay-against: class CommandTester implements \Symfony\Component\Console\Tester\TesterTrait
+    partial class CommandTester {
+        /**
+         * @param array<int, string> $interactiveInputs
+         */
+        // @overlay-against: function run(array $input, array $interactiveInputs, ?bool $interactive, ?bool $decorated, ?int $verbosity, array $normalizers): \Symfony\Component\Console\Tester\ExecutionResult
+        public function run(array $input = [], array<int, string> $interactiveInputs = [], ?bool $interactive = null, ?bool $decorated = null, ?int $verbosity = null, array<callable> $normalizers = []): \Symfony\Component\Console\Tester\ExecutionResult;
+    }
+
     /**
      * Overlay: PHPDoc shapes harvest left loose on `TesterTrait`.
      */
@@ -430,7 +515,7 @@ namespace Symfony\Component\Console\Exception {
     /**
      * Overlay: PHPDoc shapes harvest left loose on `CommandNotFoundException`.
      */
-    // @overlay-against: class CommandNotFoundException extends \InvalidArgumentException implements \Symfony\Component\Console\Exception\ExceptionInterface
+    // @overlay-against: class CommandNotFoundException extends \Symfony\Component\Console\Exception\InvalidArgumentException implements \Symfony\Component\Console\Exception\ExceptionInterface
     partial class CommandNotFoundException {
         /**
          * @param array<string> $alternatives
@@ -465,24 +550,6 @@ namespace Symfony\Component\Console\Descriptor {
     partial interface DescriptorInterface {
         // @overlay-against: function describe(\Symfony\Component\Console\Output\OutputInterface $output, object $object, array $options): void
         public function describe(\Symfony\Component\Console\Output\OutputInterface $output, object $object, array<string, mixed> $options = []): void;
-    }
-    /**
-     * Overlay: options, context, and config maps are `array<string, mixed>`. Harvest left bare `array`.
-     */
-    // @overlay-against: class ReStructuredTextDescriptor extends \Symfony\Component\Console\Descriptor\Descriptor
-    partial class ReStructuredTextDescriptor {
-        // @overlay-against: function describe(\Symfony\Component\Console\Output\OutputInterface $output, object $object, array $options): void
-        public function describe(\Symfony\Component\Console\Output\OutputInterface $output, object $object, array<string, mixed> $options = []): void;
-        // @overlay-against: function describeApplication(\Symfony\Component\Console\Application $application, array $options): void
-        protected function describeApplication(\Symfony\Component\Console\Application $application, array<string, mixed> $options = []): void;
-        // @overlay-against: function describeCommand(\Symfony\Component\Console\Command\Command $command, array $options): void
-        protected function describeCommand(\Symfony\Component\Console\Command\Command $command, array<string, mixed> $options = []): void;
-        // @overlay-against: function describeInputArgument(\Symfony\Component\Console\Input\InputArgument $argument, array $options): void
-        protected function describeInputArgument(\Symfony\Component\Console\Input\InputArgument $argument, array<string, mixed> $options = []): void;
-        // @overlay-against: function describeInputDefinition(\Symfony\Component\Console\Input\InputDefinition $definition, array $options): void
-        protected function describeInputDefinition(\Symfony\Component\Console\Input\InputDefinition $definition, array<string, mixed> $options = []): void;
-        // @overlay-against: function describeInputOption(\Symfony\Component\Console\Input\InputOption $option, array $options): void
-        protected function describeInputOption(\Symfony\Component\Console\Input\InputOption $option, array<string, mixed> $options = []): void;
     }
 }
 

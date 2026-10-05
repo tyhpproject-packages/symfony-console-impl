@@ -8,7 +8,7 @@
     ],
     "type": "library",
     "license": "Apache-2.0",
-    "version": "7.4.19.0",
+    "version": "8.1.7.0",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "extra": {
@@ -18,11 +18,9 @@
             "require": {
                 "tyhpdef/php": "@dev",
                 "tyhpdef/symfony-service-contracts": "@dev",
-                "tyhpdef/symfony-string": "@dev",
                 "tyhpdef/symfony-event-dispatcher-contracts": "@dev",
-                "tyhpdef/symfony-translation-contracts": "@dev",
-                "tyhpdef/psr-log": "@dev",
-                "tyhpdef/psr-container": "@dev"
+                "tyhpdef/psr-container": "@dev",
+                "tyhpdef/psr-clock": "@dev"
             },
             "package": {
                 "include": [
@@ -39,15 +37,13 @@
     },
     "require": {
         "php": ">=8.2",
-        "symfony/console": "7.4.19"
+        "symfony/console": "8.1.7"
     },
     "require-dev": {
         "tyhpdef/php": "@dev",
         "tyhpdef/symfony-service-contracts": "@dev",
-        "tyhpdef/symfony-string": "@dev",
         "tyhpdef/symfony-event-dispatcher-contracts": "@dev",
-        "tyhpdef/symfony-translation-contracts": "@dev",
-        "tyhpdef/psr-log": "@dev",
-        "tyhpdef/psr-container": "@dev"
+        "tyhpdef/psr-container": "@dev",
+        "tyhpdef/psr-clock": "@dev"
     }
 }
